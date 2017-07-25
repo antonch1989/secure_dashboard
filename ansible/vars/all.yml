@@ -1,0 +1,53 @@
+project_name: 'project'
+# mode should be dev or prod
+mode: 'dev'
+#project type. Specific configution depending on type of the project. Allowed values 'laravel' and 'symfony'
+project_type: 'symfony'
+# this user will be created on production environment only
+mysql_user: 'someuser'
+mysql_password: 'abc123'
+
+domain_name: 'geekway.team'
+php_version: '7.0'
+php:
+    install: '1'
+    ppa: php
+    packages:
+      - "php{{ php_version }}-bcmath"
+      - 'php{{ php_version }}-cli'
+      - "php{{ php_version }}-curl"
+      - "php{{ php_version }}-intl"
+      - "php{{ php_version }}-mcrypt"
+      - "php{{ php_version }}-gd"
+      - "php{{ php_version }}-imagick"
+      - "php{{ php_version }}-mysqlnd"
+      - "php{{ php_version }}-sqlite3"
+      - "php{{ php_version }}-pgsql"
+      - "php{{ php_version }}-xsl"
+      - "php{{ php_version }}-xdebug"
+      - "php{{ php_version }}-soap"
+      - "php{{ php_version }}-bcmath"
+      - "php{{ php_version }}-mbstring"
+      - "php{{ php_version }}-xml"
+      - "php{{ php_version }}-zip"
+      - "php{{ php_version }}-mysql"
+doc_root: /var/www/{{ project_name }}/web
+php_packages:
+  - { name: dev, package: php5-dev }
+  - { name: pear, package: php-pear }
+  - { name: xdebug, package: php5-xdebug }
+  - { name: curl, package: php5-curl }
+  - { name: mcrypt, package: php5-mcrypt }
+  - { name: mysql, package: php5-mysql }
+  - { name: redis, package: php5-redis }
+  - { name: apc, package: php-apc }
+  - { name: memcached, package: php5-memcached }
+  - { name: gd, package: php5-gd }
+php_extensions:
+  - { name: "jsmin", package: "pecl.php.net/jsmin-beta" }
+  - { name: "mongo", package: "pecl.php.net/mongo" }
+  - { name: "xhprof", package: "pecl.php.net/xhprof-beta" }
+nodejs:
+  version: _5.x
+server:
+    timezone: Europe/Moscow

@@ -1,0 +1,17 @@
+---
+- hosts: all
+  sudo:  true
+  vars_files:
+    - vars/all.yml
+  roles:
+    - init
+    - nginx
+    - php
+    - composer
+    - phpunit
+    - mysql
+    - mail
+    - git
+    - curl
+    - wget
+#    - nodejs

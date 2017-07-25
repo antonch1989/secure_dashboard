@@ -1,0 +1,22 @@
+---
+
+- name: Change fpm pool.d/www.conf
+  sudo: yes
+  template: src=www.conf_dev.tpl dest=/etc/php/{{ php_version }}/fpm/pool.d/www.conf
+  notify: restart php{{ php_version }}-fpm
+  when: mode == "dev"
+
+- name: Change fpm pool.d/www.conf
+  sudo: yes
+  template: src=www.conf_prod.tpl dest=/etc/php/{{ php_version }}/fpm/pool.d/www.conf
+  notify: restart php{{ php_version }}-fpm
+  when: mode == "prod"
+
+- name: ensure timezone is set in fpm php.ini
+  lineinfile: dest=/etc/php/{{ php_version }}/fpm/php.ini
+              regexp='date.timezone ='
+              line='date.timezone = {{ server.timezone }}'
+- name: enabling opcache
+  lineinfile: dest=/etc/php/{{ php_version }}/fpm/php.ini
+              regexp=';?opcache.enable=\d'
+              line='opcache.enable=1'

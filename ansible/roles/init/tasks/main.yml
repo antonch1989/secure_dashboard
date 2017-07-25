@@ -1,0 +1,36 @@
+---
+  - name: Update apt
+    sudo: yes
+    apt:  update_cache=yes
+
+  - name: Install system packages
+    sudo: yes
+    apt:  pkg={{ item }} state=latest
+    with_items:
+      - curl
+      - wget
+      - build-essential
+      - python-software-properties
+      - python-mysqldb
+
+  - name: Add ppa repository
+    sudo: yes
+    apt_repository: repo=ppa:ondrej/{{ php.ppa }}
+
+  - name: Update apt again
+    sudo: yes
+    apt:  update_cache=yes
+
+  - name: Install extra packages
+    sudo: yes
+    apt:  pkg={{ item }} state=latest
+    with_items:
+      - mcrypt
+      - vim
+
+  - file:
+      path: /var/www/{{ project_name }}
+      state: directory
+      owner: www-data
+      group: www-data
+      mode: 0755

@@ -1,0 +1,24 @@
+- name: Add ppa Repository
+  command: bash -lc "curl -sL https://deb.nodesource.com/setup{{ nodejs.version }} |  bash -"
+
+- name: Install nodeJS
+  apt: pkg=nodejs state=present
+
+- name: Install gulp cli
+  shell: npm install gulp-cli -g
+
+- name: Install gulp
+  shell: npm install gulp -D
+
+- name: Install gulp localy
+  shell: cd /var/www/{{ project_name }} && npm install gulp
+
+- name: Install NPM Packages
+  npm: name={{ item }} global=yes
+  with_items:
+    - bower
+    - gulp-concat
+    - gulp-uglify
+    - gulp-uglifycss
+    - gulp-watch
+    - gulp-imagemin

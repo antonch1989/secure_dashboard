@@ -1,0 +1,27 @@
+---
+  - name: Install nginx
+    sudo: yes
+    apt:  pkg=nginx state=latest
+
+  - name: Ensure nginx log directory exists
+    file: dest=/var/log/nginx/symfony state=directory
+
+  - name: Change default nginx conf
+    sudo: yes
+    template: src=nginx.conf_dev.tpl dest=/etc/nginx/nginx.conf
+    notify: restart nginx
+    when: mode == "dev"
+
+  - name: Change default nginx conf
+    sudo: yes
+    template: src=nginx.conf_prod.tpl dest=/etc/nginx/nginx.conf
+    notify: restart nginx
+    when: mode == "prod"
+
+  - name: Change default nginx site
+    sudo: yes
+    template: src=default.tpl dest=/etc/nginx/sites-available/default
+    notify: restart nginx
+
+
+

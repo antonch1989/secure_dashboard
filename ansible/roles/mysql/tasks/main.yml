@@ -1,0 +1,25 @@
+---
+- name: Install MySQL server
+  sudo: yes
+  apt:  pkg=mysql-server state=latest
+
+- name: Change my.cnf file (dev)
+  sudo: yes
+  template: src=my_dev.cnf.tpl dest=/etc/mysql/my.cnf
+  notify: restart mysql
+
+- include: users.yml
+
+- name: Create MySQL database symfony
+  command: mysql -u root -e "CREATE DATABASE IF NOT EXISTS {{ project_name }};"
+
+#Prod tasks
+
+- include: prod_users.yml
+  when: mode == "prod"
+
+- name: Change my.cnf file (prod)
+  sudo: yes
+  template: src=my_prod.cnf.tpl dest=/etc/mysql/my.cnf
+  notify: restart mysql
+  when: mode == "prod"

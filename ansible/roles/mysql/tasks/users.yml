@@ -1,0 +1,12 @@
+- mysql_user:
+    name: "root"
+    priv: '*.*:ALL,GRANT'
+    host: '%'
+    password: ''
+    state: present
+
+- mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_password }}"
+    priv: '*.*:ALL,GRANT'
+    state: absent
