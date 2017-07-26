@@ -1,4 +1,16 @@
 {% extends '::base.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+{% form_theme form _self %}
+
+{%- block form_label -%}{%- endblock form_label -%}
+
+{% block form_widget_simple -%}
+    {% if type is not defined or type not in ['file', 'hidden'] %}
+        {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) -%}
+    {% endif %}
+    {%- set type = type|default('text') -%}
+    <input placeholder="{{ label | trans }}" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -55,29 +67,17 @@
     </style>
 {% endblock %}
 
-{% block title %}Secure Dashboard{% endblock %}
-{% block main_menu %}{% endblock %}
-
-{% trans_default_domain 'FOSUserBundle' %}
-
 {% block body %}
     <div class="container">
-        <form class="form-signin" action="{{ path("fos_user_security_check") }}" method="post">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-            <h2 class="form-signin-heading">Sign In</h2>
-            <div class="form-group">
-                <input name="_username" type="text" id="inputUsername" class="form-control" value="{{ last_username }}" placeholder="{{ 'security.login.username'|trans }}" required>
-            </div>
-            <div class="form-group">
-                <input type="password" name="_password" required="required" id="inputPassword" class="form-control" placeholder="{{ 'security.login.password'|trans }}">
-            </div>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'security.login.submit'|trans }}</button>
-            <div class="create_new_account">
-                Don't have an account? Please <a href="{{ path('fos_user_registration_register') }}">Sign up</a>
-            </div>
-        </form>
+
+        {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'form-signin'}}) }}
+        <h2 class="form-signin-heading">Sign Up</h2>
+            {{ form_widget(form) }}
+            <button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'registration.submit'|trans }}</button>
+        <div class="create_new_account">
+            Have an account already? Please <a href="{{ path('fos_user_security_login') }}">Sign in</a>
+        </div>
+        {{ form_end(form) }}
+
     </div>
 {% endblock %}
